@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TXT Writer</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Courier New', monospace;
+      color: #fff;
+      background: url('images.jpeg') no-repeat center center/cover;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3rem;
+      text-shadow: 0 0 10px #ff00ff;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      outline: none;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      box-shadow: 0 0 10px #0ff;
+    }
+    .glow-button {
+      transition: 0.3s ease;
+    }
+    .glow-button:hover {
+      box-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff;
+      cursor: pointer;
+    }
+    .note-page {
+      display: none;
+      flex-direction: column;
+      background: url('picpic.avif') no-repeat center center/cover;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .note-title {
+      font-size: 2rem;
+      text-shadow: 0 0 10px #0ff;
+    }
+    .notebook {
+      flex-grow: 1;
+      background: rgba(0, 0, 0, 0.5);
+      border: 2px solid #0ff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+      overflow-y: auto;
+      line-height: 2rem;
+      color: #fff;
+      font-size: 1rem;
+      white-space: pre-wrap;
+      outline: none;
+      box-shadow: 0 0 10px #0ff;
+      background-image: repeating-linear-gradient(to bottom, transparent 0px, transparent 29px, rgba(255, 255, 255, 0.1) 30px);
+    }
+    .action-buttons {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="loginPage">
+    <h1>TXT Writer</h1>
+    <input type="text" id="loginUsername" placeholder="Username or Gmail">
+    <input type="password" id="loginPassword" placeholder="Password">
+    <button class="glow-button" onclick="login()">Login</button>
+    <p>or</p>
+    <input type="text" id="createUsername" placeholder="New Username or Gmail">
+    <input type="password" id="createPassword" placeholder="New Password">
+    <button class="glow-button" onclick="createAccount()">Create Account</button>
+  </div>
+
+  <div class="note-page" id="notePage">
+    <h2 class="note-title">Your Secret Notes</h2>
+    <div id="notebook" contenteditable="true" class="notebook"></div>
+    <div class="action-buttons">
+      <button class="glow-button" onclick="saveNotes()">Save</button>
+      <button class="glow-button" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <script>
+    let users = JSON.parse(localStorage.getItem('users')) || {};
+    let currentUser = null;
+
+    function createAccount() {
+      const username = document.getElementById('createUsername').value.trim();
+      const password = document.getElementById('createPassword').value.trim();
+
+      if (username && password) {
+        if (users[username]) {
+          alert('Account already exists!');
+        } else {
+          users[username] = { password, notes: '' };
+          localStorage.setItem('users', JSON.stringify(users));
+          alert('Account created successfully!');
+        }
+      } else {
+        alert('Please fill in username and password.');
+      }
+    }
+
+    function login() {
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+
+      if (users[username] && users[username].password === password) {
+        currentUser = username;
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('notePage').style.display = 'flex';
+        document.getElementById('notebook').innerText = users[username].notes || '';
+      } else {
+        alert('Invalid username or password.');
+      }
+    }
+
+    function saveNotes() {
+      if (currentUser) {
+        users[currentUser].notes = document.getElementById('notebook').innerText;
+        localStorage.setItem('users', JSON.stringify(users));
+        alert('Notes saved!');
+      }
+    }
+
+    function logout() {
+      currentUser = null;
+      document.getElementById('notePage').style.display = 'none';
+      document.getElementById('loginPage').style.display = 'flex';
+    }
+  </script>
+</body>
+</html>
