@@ -1,148 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TXT Writer</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Courier New', monospace;
-      color: #fff;
-      background: url('images.jpeg') no-repeat center center/cover;
-    }
-    .container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
-      text-align: center;
-    }
-    h1 {
-      font-size: 3rem;
-      text-shadow: 0 0 10px #ff00ff;
-    }
-    input, button {
-      padding: 10px;
-      margin: 10px;
-      border: none;
-      border-radius: 5px;
-      font-size: 1rem;
-      outline: none;
-      background: rgba(0, 0, 0, 0.7);
-      color: #fff;
-      box-shadow: 0 0 10px #0ff;
-    }
-    .glow-button {
-      transition: 0.3s ease;
-    }
-    .glow-button:hover {
-      box-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff;
-      cursor: pointer;
-    }
-    .note-page {
-      display: none;
-      flex-direction: column;
-      background: url('picpic.avif') no-repeat center center/cover;
-      height: 100vh;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .note-title {
-      font-size: 2rem;
-      text-shadow: 0 0 10px #0ff;
-    }
-    .notebook {
-      flex-grow: 1;
-      background: rgba(0, 0, 0, 0.5);
-      border: 2px solid #0ff;
-      border-radius: 10px;
-      padding: 20px;
-      margin-top: 20px;
-      overflow-y: auto;
-      line-height: 2rem;
-      color: #fff;
-      font-size: 1rem;
-      white-space: pre-wrap;
-      outline: none;
-      box-shadow: 0 0 10px #0ff;
-      background-image: repeating-linear-gradient(to bottom, transparent 0px, transparent 29px, rgba(255, 255, 255, 0.1) 30px);
-    }
-    .action-buttons {
-      margin-top: 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>TXT Writer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Orbitron', sans-serif;
+            background: url('images.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding-top: 10%;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #ffffff;
+            text-shadow: 0 0 10px #ff00ff;
+            margin-bottom: 30px;
+        }
+
+        .cyber-btn {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 1.2em;
+            color: #0ff;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #0ff;
+            border-radius: 10px;
+            cursor: pointer;
+            text-shadow: 0 0 5px #0ff;
+            box-shadow: 0 0 15px #0ff;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .cyber-btn:hover {
+            color: #000;
+            background: #0ff;
+            box-shadow: 0 0 30px #0ff;
+        }
+
+        .auth-form {
+            display: none;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .auth-form input {
+            display: block;
+            margin: 0 auto 15px auto;
+            padding: 12px 10px;
+            width: 250px;
+            border: 2px solid #0ff;
+            background: rgba(0, 0, 0, 0.6);
+            color: #ffffff;
+            border-radius: 10px;
+            font-size: 0.85em;
+            text-shadow: 0 0 2px #0ff;
+        }
+
+        .auth-form input::placeholder {
+            color: #0ff;
+            font-size: 0.85em;
+            text-shadow: 0 0 2px #0ff;
+            opacity: 0.7;
+        }
+
+        .note-container {
+            display: none;
+            background: url('picpic.avif') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            overflow-y: auto;
+            padding-top: 40px;
+            text-align: center;
+        }
+
+        .note-header {
+            font-size: 2.5em;
+            color: #ffffff;
+            text-shadow: 0 0 8px #ff00ff;
+            margin-bottom: 20px;
+        }
+
+        .note-area {
+            width: 50%;
+            height: 60vh;
+            margin: auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #0ff;
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 1.1em;
+            line-height: 2;
+            white-space: pre-wrap;
+            background-image: repeating-linear-gradient(to bottom, transparent, transparent 28px, rgba(255, 255, 255, 0.1) 29px);
+            box-shadow: 0 0 10px #0ff;
+            text-shadow: 0 0 2px #0ff;
+        }
+
+        .note-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container" id="loginPage">
+
+<div class="container" id="authContainer">
     <h1>TXT Writer</h1>
-    <input type="text" id="loginUsername" placeholder="Username or Gmail">
-    <input type="password" id="loginPassword" placeholder="Password">
-    <button class="glow-button" onclick="login()">Login</button>
-    <p>or</p>
-    <input type="text" id="createUsername" placeholder="New Username or Gmail">
-    <input type="password" id="createPassword" placeholder="New Password">
-    <button class="glow-button" onclick="createAccount()">Create Account</button>
-  </div>
+    <button class="cyber-btn" onclick="showLogin()">Login</button>
+    <button class="cyber-btn" onclick="showRegister()">Create Account</button>
 
-  <div class="note-page" id="notePage">
-    <h2 class="note-title">Your Secret Notes</h2>
-    <div id="notebook" contenteditable="true" class="notebook"></div>
-    <div class="action-buttons">
-      <button class="glow-button" onclick="saveNotes()">Save</button>
-      <button class="glow-button" onclick="logout()">Logout</button>
+    <div class="auth-form" id="loginForm">
+        <input type="text" id="loginUsername" placeholder="Username or Gmail ">
+        <input type="password" id="loginPassword" placeholder="Password ">
+        <button class="cyber-btn" onclick="login()">Login</button>
     </div>
-  </div>
 
-  <script>
+    <div class="auth-form" id="registerForm">
+        <input type="text" id="registerUsername" placeholder="Username ">
+        <input type="email" id="registerEmail" placeholder="Gmail (Optional) ">
+        <input type="password" id="registerPassword" placeholder="Password 
+        "cyber-btn" onclick="register()">Create Account</button>
+    </div>
+</div>
+
+<div class="note-container" id="noteContainer">
+    <div class="note-header">Your Notes</div>
+    <div class="note-area" id="noteArea" contenteditable="true"></div>
+    <div class="note-buttons">
+        <button class="cyber-btn" onclick="saveNote()">Save</button>
+        <button class="cyber-btn" onclick="logout()">Logout</button>
+    </div>
+</div>
+
+<script>
     let users = JSON.parse(localStorage.getItem('users')) || {};
     let currentUser = null;
 
-    function createAccount() {
-      const username = document.getElementById('createUsername').value.trim();
-      const password = document.getElementById('createPassword').value.trim();
+    function showLogin() {
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('registerForm').style.display = 'none';
+    }
 
-      if (username && password) {
-        if (users[username]) {
-          alert('Account already exists!');
-        } else {
-          users[username] = { password, notes: '' };
-          localStorage.setItem('users', JSON.stringify(users));
-          alert('Account created successfully!');
+    function showRegister() {
+        document.getElementById('registerForm').style.display = 'block';
+        document.getElementById('loginForm').style.display = 'none';
+    }
+
+    function register() {
+        const username = document.getElementById('registerUsername').value;
+        const email = document.getElementById('registerEmail').value;
+        const password = document.getElementById('registerPassword').value;
+
+        if (!username || !password) {
+            alert('Username and Password are required!');
+            return;
         }
-      } else {
-        alert('Please fill in username and password.');
-      }
+
+        users[username] = { email, password, note: '' };
+        localStorage.setItem('users', JSON.stringify(users));
+        alert('Account Created! Please Login.');
+        showLogin();
     }
 
     function login() {
-      const username = document.getElementById('loginUsername').value.trim();
-      const password = document.getElementById('loginPassword').value.trim();
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
 
-      if (users[username] && users[username].password === password) {
-        currentUser = username;
-        document.getElementById('loginPage').style.display = 'none';
-        document.getElementById('notePage').style.display = 'flex';
-        document.getElementById('notebook').innerText = users[username].notes || '';
-      } else {
-        alert('Invalid username or password.');
-      }
+        if (users[username] && users[username].password === password) {
+            currentUser = username;
+            loadNote();
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('noteContainer').style.display = 'block';
+        } else {
+            alert('Invalid Credentials!');
+        }
     }
 
-    function saveNotes() {
-      if (currentUser) {
-        users[currentUser].notes = document.getElementById('notebook').innerText;
+    function loadNote() {
+        document.getElementById('noteArea').innerText = users[currentUser].note;
+    }
+
+    function saveNote() {
+        users[currentUser].note = document.getElementById('noteArea').innerText;
         localStorage.setItem('users', JSON.stringify(users));
-        alert('Notes saved!');
-      }
+        alert('Note Saved!');
     }
 
     function logout() {
-      currentUser = null;
-      document.getElementById('notePage').style.display = 'none';
-      document.getElementById('loginPage').style.display = 'flex';
+        currentUser = null;
+        document.getElementById('noteContainer').style.display = 'none';
+        document.getElementById('authContainer').style.display = 'block';
     }
-  </script>
+</script>
+
 </body>
 </html>
